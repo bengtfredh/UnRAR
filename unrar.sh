@@ -26,6 +26,4 @@ while IFS=  read -r -d $'\0'; do
     extractRar $DIRNAME $REPLY $FILES
 done < <(find $DIR -name '*.rar' -print0)
 
-find $DIR -name '*.r??' -exec rm -rf {} \;
-
 echo "UNRAR Done"
