@@ -1,4 +1,4 @@
-FROM docker.io/lsiobase/alpine:latest
+FROM docker.io/lsiobase/alpine:3.14
 MAINTAINER onigoetz <onigoetz@onigoetz.ch>
 
 RUN apk add --no-cache bash unrar
