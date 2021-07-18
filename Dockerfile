@@ -3,7 +3,7 @@ MAINTAINER Bengt <bengt@fredhs.net>
 
 RUN apk add --no-cache bash unrar
 
-RUN  RUN addgroup -S abc && adduser -S abc -G abc
+RUN  addgroup -S abc && adduser -S abc -G abc
 
 COPY crontab /var/spool/cron/crontabs/abc
 
