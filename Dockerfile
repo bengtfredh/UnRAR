@@ -1,4 +1,4 @@
-FROM docker.io/library/alpine:latest
+FROM docker.io/library/alpine:3.14
 MAINTAINER Bengt <bengt@fredhs.net>
 
 RUN apk add --no-cache bash unrar
