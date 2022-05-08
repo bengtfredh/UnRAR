@@ -1,7 +1,29 @@
-FROM docker.io/library/alpine:3.14
+FROM docker.io/library/alpine:latest
 MAINTAINER Bengt <bengt@fredhs.net>
 
-RUN apk add --no-cache bash unrar
+RUN apk add --no-cache bash && \
+  echo "**** install build packages ****" && \
+  apk add --no-cache --upgrade --virtual=build-dependencies \
+    make \
+    g++ \
+    gcc && \
+  echo "**** install unrar from source ****" && \
+  mkdir /tmp/unrar && \
+  curl -o \
+    /tmp/unrar.tar.gz -L \
+    "https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz" && \  
+  tar xf \
+    /tmp/unrar.tar.gz -C \
+    /tmp/unrar --strip-components=1 && \
+  cd /tmp/unrar && \
+  make && \
+  install -v -m755 unrar /usr/local/bin && \
+  echo "**** cleanup ****" && \
+  apk del --purge \
+    build-dependencies && \
+  rm -rf \
+    /root/.cache \
+    /tmp/*
 
 RUN  addgroup -S abc && adduser -S abc -G abc
 
