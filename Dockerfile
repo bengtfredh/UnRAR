@@ -1,4 +1,7 @@
 FROM docker.io/library/alpine:latest
+
+ARG UNRAR_VERSION=6.1.4
+
 MAINTAINER Bengt <bengt@fredhs.net>
 
 RUN apk add --no-cache bash && \
@@ -6,7 +9,9 @@ RUN apk add --no-cache bash && \
   apk add --no-cache --upgrade --virtual=build-dependencies \
     make \
     g++ \
-    gcc && \
+    gcc \
+    curl \
+    tar && \
   echo "**** install unrar from source ****" && \
   mkdir /tmp/unrar && \
   curl -o \
