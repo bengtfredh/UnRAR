@@ -23,13 +23,11 @@ jobs:
         uses: ASzc/change-string-case-action@v2
         with:
           string: ${{ github.repository }}
-      - run: |
-          echo "${{ steps.string.outputs.lowercase }}"
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ghcr.io/${{ steps.string.outputs.lowercase }}:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
