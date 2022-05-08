@@ -21,7 +21,7 @@ jobs:
       - name: downcase repo
         id: repo_lowercase
         run: |
-          echo echo "::set-output name=repo::${GITHUB_REPOSITORY,,}"
+          echo echo "::set-output name=repo::$(echo ${GITHUB_REPOSITORY,,})"
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
