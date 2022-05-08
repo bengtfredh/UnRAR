@@ -25,6 +25,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: lowercase repo
+        id: string
+        uses: ASzc/change-string-case-action@v2
+        with:
+          string: ${{ github.repository }}
+      - run: |
+          echo "${{ steps.string.outputs.lowercase }}"
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
