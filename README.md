@@ -1,4 +1,4 @@
-## UnRAR   [![Build Status](https://drone.fredhs.net/api/badges/drone/UnRAR/status.svg)](https://drone.fredhs.net/drone/UnRAR)
+## UnRAR
 
 The script works with one entry parameter : a path. (/path/to/data:/data)
 
