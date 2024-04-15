@@ -1,16 +1,6 @@
-FROM docker.io/library/alpine:latest
+FROM ghcr.io/linuxserver/unrar:amd64-latest
 
 MAINTAINER Bengt <bengt@fredhs.net>
-
-RUN apk add --no-cache bash 7zip && \
-  echo "**** cleanup ****" && \
-  rm -rf \
-    /root/.cache \
-    /tmp/*
-
-RUN ln -s 7z /usr/bin/unrar
-
-RUN  addgroup -S abc && adduser -S abc -G abc
 
 COPY crontab /var/spool/cron/crontabs/abc
 
