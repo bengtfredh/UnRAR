@@ -10,7 +10,7 @@ function extractRar() {
     while read -r FILE; do
         if [ ! -f "$_DIRNAME/$FILE" ]; then
             echo "Extracting"
-            unrar x "$_RAR" "$_DIRNAME"
+            unrar x "$_RAR" -o"$_DIRNAME"
         fi
     done <<< "$_FILES";
 }
