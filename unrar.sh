@@ -21,7 +21,7 @@ while IFS=  read -r -d $'\0'; do
     echo "=> $(basename $REPLY)"
 
     DIRNAME=$(dirname $REPLY)
-    FILES=$(unrar lb $REPLY | grep -v '.txt' | grep -v '.nfo')
+    FILES=$(unrar l $REPLY | grep -v '.txt' | grep -v '.nfo')
 
     extractRar $DIRNAME $REPLY $FILES
 done < <(find $DIR -name '*.rar' -print0)
