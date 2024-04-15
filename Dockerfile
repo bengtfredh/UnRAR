@@ -1,34 +1,14 @@
 FROM docker.io/library/alpine:latest
 
-ARG UNRAR_VERSION=6.1.4
-
 MAINTAINER Bengt <bengt@fredhs.net>
 
-RUN apk add --no-cache bash && \
-  echo "**** install build packages ****" && \
-  apk add --no-cache --upgrade --virtual=build-dependencies \
-    make \
-    g++ \
-    gcc \
-    curl \
-    tar && \
-  echo "**** install unrar from source ****" && \
-  mkdir /tmp/unrar && \
-  curl -o \
-    /tmp/unrar.tar.gz -L \
-    "https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz" && \  
-  tar xf \
-    /tmp/unrar.tar.gz -C \
-    /tmp/unrar --strip-components=1 && \
-  cd /tmp/unrar && \
-  make && \
-  install -v -m755 unrar /usr/local/bin && \
+RUN apk add --no-cache bash 7zip && \
   echo "**** cleanup ****" && \
-  apk del --purge \
-    build-dependencies && \
   rm -rf \
     /root/.cache \
     /tmp/*
+
+RUN ln -s 7z /usr/bin/unrar
 
 RUN  addgroup -S abc && adduser -S abc -G abc
 
