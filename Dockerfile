@@ -17,4 +17,4 @@ RUN chmod +x /bin/unrar_torrent.sh
 
 VOLUME /data
 
-CMD ["crond", "-l", "2", "-f"]
+CMD ["crond", "-s", "-f"]
