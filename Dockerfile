@@ -1,5 +1,3 @@
-MAINTAINER Bengt <bengt@fredhs.net>
-
 FROM fedora:latest as build-env
 
 RUN dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
@@ -9,6 +7,7 @@ RUN dnf -y --installroot /output --releasever $(rpm -E %fedora) --setopt=install
 RUN dnf -y --installroot /output clean all
 
 FROM scratch
+MAINTAINER Bengt <bengt@fredhs.net>
 COPY --from=build-env /output /
 
 COPY crontab /etc/cron.d/unrar
