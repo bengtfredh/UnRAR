@@ -1,34 +1,41 @@
-name: dockerbuild
+name: Build from Containerfile
 on:
   push:
-    branches: master
+  pull_request:
   schedule:
-    - cron: "33 0 * * *"
+    - cron: "44 4 * * *"
 
 jobs:
   build:
-    name: ""
+    name: Build Container
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      REGISTRY: ghcr.io/bengtfredh
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to DockerHub
-        uses: docker/login-action@v3 
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: downcase repo
-        id: repo_lowercase
-        run: |
-          echo "::set-output name=repo::$(echo ${GITHUB_REPOSITORY,,})"
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ghcr.io/${{ steps.repo_lowercase.outputs.repo }}:latest
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+    - name: Clone the repository
+      uses: actions/checkout@v3
+
+    - name: Buildah Action
+      id: build
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: unrar
+        tags: ${{ github.sha }} latest
+        containerfiles: |
+          ./Dockerfile
+    - name: Log in to the GitHub Container registry
+      uses: redhat-actions/podman-login@v1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push to GitHub Container Repository
+      id: push-to-ghcr
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build.outputs.image }}
+        tags: ${{ steps.build.outputs.tags }}
+        registry: ${{ env.REGISTRY }}
+
