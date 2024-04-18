@@ -10,16 +10,14 @@ FROM scratch
 MAINTAINER Bengt <bengt@fredhs.net>
 COPY --from=build-env /output /
 
-COPY crontab /etc/cron.d/unrar
-RUN chmod 0644 /etc/cron.d/unrar
+RUN useradd abc
+COPY crontab crontab /var/spool/cron/crontabs/abc
 
 COPY ./unrar.sh /bin/unrar_torrent.sh
 RUN chmod +x /bin/unrar_torrent.sh
 
 RUN sed -i '/pam_loginuid.so/d' /etc/pam.d/crond
-RUN crontab /etc/cron.d/unrar
 
 VOLUME /data
 
-#CMD ["crond", "-n"]
-CMD crond && tail -f /dev/null
+CMD ["crond", "-n"]

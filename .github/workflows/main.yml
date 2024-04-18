@@ -23,6 +23,7 @@ jobs:
       with:
         image: unrar
         tags: ${{ github.sha }} latest
+        oci: true
         containerfiles: |
           ./Dockerfile
     - name: Log in to the GitHub Container registry
