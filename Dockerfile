@@ -14,7 +14,8 @@ COPY crontab /etc/cron.d/unrar
 
 COPY ./unrar.sh /bin/unrar_torrent.sh
 RUN chmod +x /bin/unrar_torrent.sh
+RUN sed -i '/pam_loginuid.so/d' /etc/pam.d/crond
 
 VOLUME /data
 
-CMD ["crond", "-s", "-f"]
+CMD ["crond", "-n"]
