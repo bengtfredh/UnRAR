@@ -1,4 +1,4 @@
-FROM docker.io/library/fedora:latest as build-env
+FROM fedora:latest as build-env
 
 RUN dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
@@ -10,8 +10,7 @@ FROM scratch
 MAINTAINER Bengt <bengt@fredhs.net>
 COPY --from=build-env /output /
 
-RUN useradd abc
-COPY crontab crontab /var/spool/cron/crontabs/abc
+COPY crontab /var/spool/cron/crontabs/unrar
 
 COPY ./unrar.sh /bin/unrar_torrent.sh
 RUN chmod +x /bin/unrar_torrent.sh
