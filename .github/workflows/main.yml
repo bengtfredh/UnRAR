@@ -15,7 +15,7 @@ jobs:
       REGISTRY: ghcr.io/bengtfredh
     steps:
     - name: Clone the repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Buildah Action
       id: build
