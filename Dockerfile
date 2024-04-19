@@ -20,5 +20,4 @@ RUN sed -i '/pam_loginuid.so/d' /etc/pam.d/crond
 
 VOLUME /data
 
-#CMD ["crond", "-n"]
-CMD crond && tail -f /var/log/cron.log
+CMD ["crond", "-n"]
