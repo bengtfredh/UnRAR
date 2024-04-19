@@ -1,1 +1,2 @@
-*/5 * * * * /bin/unrar_torrent.sh "/data/"
+*/5 * * * * root /bin/unrar_torrent.sh "/data/"
+
