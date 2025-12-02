@@ -1,23 +1,16 @@
-FROM fedora:latest as build-env
+FROM docker.io/library/alpine:3.14
+# Maintainer: Bengt <bengt@fredhs.net>
 
-RUN dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+RUN apk add --no-cache bash unrar
 
-RUN mkdir /output
-RUN dnf -y --installroot /output --releasever $(rpm -E %fedora) --setopt=install_weak_deps=false --nodocs install glibc-minimal-langpack coreutils-single crontabs findutils unrar
-RUN dnf -y --installroot /output clean all
+RUN  addgroup -S abc && adduser -S abc -G abc
 
-FROM scratch
-MAINTAINER Bengt <bengt@fredhs.net>
-COPY --from=build-env /output /
+COPY crontab /var/spool/cron/crontabs/abc
 
-COPY ./crontab /etc/cron.d/unrar
-RUN chmod 0644 /etc/cron.d/unrar
-
-COPY ./unrar.sh /usr/bin/unrar_torrent.sh
-RUN chmod +x /usr/bin/unrar_torrent.sh
-
-RUN sed -i '/pam_loginuid.so/d' /etc/pam.d/crond
+COPY ./unrar.sh /bin/unrar_torrent.sh
+RUN chmod +x /bin/unrar_torrent.sh && \
+    rm -rf /usr/include /tmp/* /var/cache/apk/*
 
 VOLUME /data
 
-CMD ["crond", "-n"]
+CMD ["crond", "-l", "2", "-f"]
