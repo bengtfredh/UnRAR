@@ -4,6 +4,7 @@ on:
   pull_request:
   schedule:
     - cron: "44 4 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,29 +15,28 @@ jobs:
     env:
       REGISTRY: ghcr.io/bengtfredh
     steps:
-    - name: Clone the repository
-      uses: actions/checkout@v4
+      - name: Clone the repository
+        uses: actions/checkout@v4
 
-    - name: Buildah Action
-      id: build
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: unrar
-        tags: ${{ github.sha }} latest
-        oci: true
-        containerfiles: |
-          ./Dockerfile
-    - name: Log in to the GitHub Container registry
-      uses: redhat-actions/podman-login@v1
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Push to GitHub Container Repository
-      id: push-to-ghcr
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        image: ${{ steps.build.outputs.image }}
-        tags: ${{ steps.build.outputs.tags }}
-        registry: ${{ env.REGISTRY }}
-
+      - name: Buildah Action
+        id: build
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: unrar
+          tags: ${{ github.sha }} latest
+          oci: true
+          containerfiles: |
+            ./Dockerfile
+      - name: Log in to the GitHub Container registry
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push to GitHub Container Repository
+        id: push-to-ghcr
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          registry: ${{ env.REGISTRY }}
