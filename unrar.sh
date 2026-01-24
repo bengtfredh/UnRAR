@@ -8,22 +8,22 @@ function extractRar() {
     _FILES="$3"
 
     while read -r FILE; do
-        if [ ! -f "$_DIRNAME/$FILE" ]; then
+        if [ -n "$FILE" ] && [ ! -f "$_DIRNAME/$FILE" ]; then
             echo "Extracting"
-            unrar x $_RAR $_DIRNAME
+            unrar x "$_RAR" "$_DIRNAME"
         fi
-    done <<< "$_FILES";
+    done <<< "$_FILES"
 }
 
 echo "Starting UNRAR"
 
-while IFS=  read -r -d $'\0'; do
-    echo "=> $(basename $REPLY)"
+while IFS= read -r -d $'\0'; do
+    echo "=> $(basename "$REPLY")"
 
-    DIRNAME=$(dirname $REPLY)
-    FILES=$(unrar lb $REPLY | grep -v '.txt' | grep -v '.nfo')
+    DIRNAME="$(dirname "$REPLY")"
+    FILES="$(unrar lb "$REPLY" | grep -v '.txt' | grep -v '.nfo')"
 
-    extractRar $DIRNAME $REPLY $FILES
-done < <(find $DIR -name '*.rar' -print0)
+    extractRar "$DIRNAME" "$REPLY" "$FILES"
+done < <(find "$DIR" -name '*.rar' -print0)
 
 echo "UNRAR Done"
